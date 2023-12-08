@@ -46,3 +46,15 @@ export const createThread = async () => {
 
   return await response.json();
 };
+
+export const createTravelDemo = async () => {
+  const response = await fetch(
+    `${ASSISTANTS_API_URL}/assistants/create-travel`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+
+  return await response.json();
+};

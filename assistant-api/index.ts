@@ -41,6 +41,55 @@ app.get("/assistants", async (req, res) => {
   res.send(assistants);
 });
 
+app.post("/assistants/create-travel", async (req, res) => {
+  const assistant = await openai.beta.assistants.create({
+    name: "Travel planner",
+    instructions:
+      "You are a helpful travel assistant. Use the provided functions to assist in planning a fun and memorable getaway.",
+    model: "gpt-3.5-turbo-1106",
+    tools: [
+      {
+        type: "function",
+        function: {
+          name: "fetchEvents",
+          description:
+            "Gets a list of upcoming concerts, sports games, theatrical productions, and other events near a given location.",
+          parameters: {
+            type: "object",
+            properties: {
+              lat: {
+                type: "number",
+                description:
+                  "The latitude of the desired search location, e.g. Boston would be 42.3601",
+              },
+              lon: {
+                type: "number",
+                description:
+                  "The longitude of the desired search location, e.g. Boston would be -71.0589",
+              },
+              startDate: {
+                type: "string",
+                description:
+                  "The UTC start date events should appear after expressed as year-month-day, e.g. 2012-06-12",
+              },
+              endDate: {
+                type: "string",
+                description:
+                  "The UTC end date events should appear before expressed as year-month-day, e.g. 2012-01-23",
+              },
+            },
+            required: ["lat", "lon", "startDate", "endDate"],
+          },
+        },
+      },
+    ],
+  });
+
+  res.status(201).json({
+    id: assistant.id,
+  });
+});
+
 app.post("/assistant/message", async (req, res) => {
   const threadId = req.body.threadId;
   const assistantId = req.body.assistantId;
@@ -96,7 +145,7 @@ app.post("/assistant/message", async (req, res) => {
 
   const messages = await openai.beta.threads.messages.list(threadId);
 
-  res.status(200).json({
+  res.status(201).json({
     message: messages.data[0],
   });
 });

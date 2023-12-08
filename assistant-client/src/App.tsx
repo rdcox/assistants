@@ -5,7 +5,7 @@ import { useAssistants } from './hooks/useAssistants';
 import { useDisclosure } from '@mantine/hooks';
 import Markdown from 'react-markdown';
 import { useEffect, useState } from 'react';
-import { createThread, postMessage } from './api/assistants';
+import { createThread, createTravelDemo, postMessage } from './api/assistants';
 
 function App() {
   // state
@@ -19,7 +19,7 @@ function App() {
 
   // hooks
   const [opened, { toggle }] = useDisclosure();
-  const assistants = useAssistants();
+  let assistants = useAssistants();
 
   // effects
   useEffect(() => {
@@ -58,6 +58,11 @@ function App() {
     setIsDrawerOpen(true);
   }
 
+  const handleCreateTravel = async () => {
+    await createTravelDemo();
+    assistants = await useAssistants();
+  }
+
   return (
     <MantineProvider>
       <AppShell
@@ -87,7 +92,10 @@ function App() {
                 />
               ))}
           </div>
-          <Button color='green' onClick={() => handleCreateNewAssistant()}>New Assistant</Button>
+          <div>
+            <Button color='green' onClick={() => handleCreateNewAssistant()}>New Assistant</Button>
+            <Button color='green' onClick={() => handleCreateTravel()} style={{ marginTop: '10px' }}>Create Travel Demo</Button>
+          </div>
         </Stack>
       </AppShell.Navbar>
 
