@@ -1,0 +1,17 @@
+.chat-main {
+    display: flex;
+    flex-grow: 1;
+    height: auto;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.chat-history {
+    height: auto !important;
+    flex-grow: 1;
+}
+
+.chat-input {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
